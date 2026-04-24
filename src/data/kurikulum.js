@@ -80,7 +80,7 @@ export const getSemesters = () => [...new Set(kurikulum.map(mk => mk.semester))]
 export const getMKBySemester = (sem) => kurikulum.filter(mk => mk.semester === sem);
 export const getMKPilihan = () => kurikulum.filter(mk => mk.sifat === "Pilihan");
 
-const MBKM_EXCLUDE = ["FTS32053", "UXN47036"]; // Metodologi Penelitian, KKN
+const MBKM_EXCLUDE = ["FTS32053", "UXN47036", "TIS42473"]; // Metodologi Penelitian, KKN, Tugas Akhir
 export const KERJA_PRAKTEK_KODE = "TIS32453";
 export const MBKM_PREREQ = ["FTS32053", "TIS41463"]; // Metopen, Sempro
 
