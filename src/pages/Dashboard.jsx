@@ -1,5 +1,5 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import { GraduationCap, RotateCcw, AlertTriangle } from "lucide-react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { GraduationCap, RotateCcw, AlertTriangle, ShieldAlert } from "lucide-react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { kurikulum, getSemesters, getMKBySemester, AGAMA_KODE } from "../data/kurikulum";
@@ -19,6 +19,8 @@ export default function Dashboard({ user }) {
   const [agamaChoice, setAgamaChoice] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showReset, setShowReset] = useState(false);
+  const [toast, setToast] = useState(null);
+  const toastTimer = useRef(null);
 
   useEffect(() => {
     const load = async () => {
@@ -53,6 +55,12 @@ export default function Dashboard({ user }) {
     save(newStatus, mbkmData, newAgama);
   };
 
+  const showToast = (msg) => {
+    clearTimeout(toastTimer.current);
+    setToast(msg);
+    toastTimer.current = setTimeout(() => setToast(null), 3500);
+  };
+
   const PREREQ = {
     "TIS41463": { butuh: "FTS32053", nama: "Metodologi Penelitian" },  // Sempro butuh Metopen
     "TIS42473": { butuh: "TIS41463", nama: "Seminar Proposal" },        // Tugas Akhir butuh Sempro
@@ -68,7 +76,7 @@ export default function Dashboard({ user }) {
       const { butuh, nama } = PREREQ[kode];
       const prereqStatus = statusMK[butuh] || mbkmData.some(m => m.mataKuliah?.includes(butuh)) ? "ok" : "belum";
       if (prereqStatus !== "ok") {
-        alert(`Mata kuliah ini memerlukan "${nama}" diambil terlebih dahulu.`);
+        showToast(`Mata kuliah ini memerlukan "${nama}" diambil terlebih dahulu.`);
         return;
       }
     }
@@ -185,6 +193,27 @@ export default function Dashboard({ user }) {
           onClose={() => setShowMBKM(false)}
           statusMK={statusMK}
         />
+      )}
+
+      {toast && (
+        <div style={{
+          position: "fixed", bottom: 28, left: "50%", transform: "translateX(-50%)",
+          zIndex: 300, display: "flex", alignItems: "center", gap: 10,
+          background: "var(--bg-primary)", border: "1px solid var(--border)",
+          borderRadius: 16, padding: "12px 18px", maxWidth: 380, width: "calc(100% - 32px)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.18)", animation: "toastIn 0.25s ease",
+        }}>
+          <div style={{
+            width: 34, height: 34, borderRadius: 10, background: "var(--warning-soft, #fff8e1)",
+            display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+          }}>
+            <ShieldAlert size={17} color="var(--warning, #f59e0b)" />
+          </div>
+          <p style={{ fontSize: 13, color: "var(--text-primary)", lineHeight: 1.45, flex: 1 }}>{toast}</p>
+          <button onClick={() => setToast(null)} style={{
+            color: "var(--text-tertiary)", fontSize: 18, lineHeight: 1, padding: "0 2px", flexShrink: 0,
+          }}>×</button>
+        </div>
       )}
 
       {showReset && (

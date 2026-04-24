@@ -160,6 +160,12 @@ a { text-decoration: none; color: inherit; }
   white-space: nowrap;
 }
 
+/* ── Toast animation ────────────────────────── */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 /* ── Scrollbar ──────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
