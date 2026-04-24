@@ -26,7 +26,7 @@ export default function Login() {
           </svg>
           Masuk dengan Google
         </button>
-        <p className={styles.note}>Hanya untuk mahasiswa Universitas Riau.<br />Data studi kamu aman dan terenkripsi.</p>
+        <p className={styles.note}>Untuk mahasiswa S1 Teknik Informatika UNRI.<br />Kurikulum 2017 Revisi.</p>
       </div>
     </div>
   );
