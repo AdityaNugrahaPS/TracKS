@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { X, Check, Trash2 } from "lucide-react";
-import { getMKMBKM, kurikulum } from "../data/kurikulum";
+import { X, Check } from "lucide-react";
+import { getMKMBKM } from "../data/kurikulum";
 import styles from "./MBKMModal.module.css";
 
 const MAX_SKS = 20;
 
-export default function MBKMModal({ mbkmData, onSave, onDelete, onClose, statusMK = {} }) {
+export default function MBKMModal({ mbkmData, onSave, onClose, statusMK = {} }) {
   const canAdd = mbkmData.length < 2;
   const nextPeriode = mbkmData.length + 1;
 
@@ -51,31 +51,7 @@ export default function MBKMModal({ mbkmData, onSave, onDelete, onClose, statusM
         </div>
 
         <div className={styles.body}>
-
-          {mbkmData.length > 0 && (
-            <div className={styles.field}>
-              <label>MBKM Tersimpan</label>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {mbkmData.map(m => (
-                  <div key={m.periode} className={styles.savedEntry}>
-                    <div className={styles.savedInfo}>
-                      <span className={styles.savedTipe}>{m.tipe}</span>
-                      <span className={styles.savedMeta}>Sem {m.semester} · {m.sks} SKS · {m.mataKuliah?.length || 0} MK</span>
-                    </div>
-                    <button
-                      className={styles.deleteBtn}
-                      onClick={() => onDelete(m.periode)}
-                      title="Hapus MBKM ini"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {canAdd && (
+          {canAdd ? (
             <>
               <div className={styles.field}>
                 <label>Tipe Kegiatan</label>
@@ -84,11 +60,7 @@ export default function MBKMModal({ mbkmData, onSave, onDelete, onClose, statusM
                     <button
                       key={t}
                       className={tipe === t ? styles.segActive : styles.segBtn}
-                      onClick={() => {
-                        setTipe(t);
-                        setSearch("");
-                        setSelected([]);
-                      }}
+                      onClick={() => { setTipe(t); setSearch(""); setSelected([]); }}
                     >{t}</button>
                   ))}
                 </div>
@@ -142,9 +114,7 @@ export default function MBKMModal({ mbkmData, onSave, onDelete, onClose, statusM
                 </div>
               </div>
             </>
-          )}
-
-          {!canAdd && (
+          ) : (
             <p style={{ fontSize: 13, color: "var(--text-secondary)", textAlign: "center", padding: "8px 0" }}>
               Maksimal 2 periode MBKM sudah tercapai.
             </p>

@@ -145,12 +145,6 @@ export default function Dashboard({ user }) {
     setShowMBKM(false);
   };
 
-  const deleteMBKM = (periode) => {
-    const newMbkm = mbkmData.filter(m => m.periode !== periode);
-    setMbkmData(newMbkm);
-    save(statusMK, newMbkm, agamaChoice);
-  };
-
   const batalKonversi = (kode) => {
     const newMbkm = mbkmData.map(m => {
       if (!m.mataKuliah?.includes(kode)) return m;
@@ -241,7 +235,6 @@ export default function Dashboard({ user }) {
         <MBKMModal
           mbkmData={mbkmData}
           onSave={saveMBKM}
-          onDelete={deleteMBKM}
           onClose={() => setShowMBKM(false)}
           statusMK={statusMK}
         />
