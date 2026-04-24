@@ -81,11 +81,11 @@ export const getMKBySemester = (sem) => kurikulum.filter(mk => mk.semester === s
 export const getMKPilihan = () => kurikulum.filter(mk => mk.sifat === "Pilihan");
 
 const MBKM_EXCLUDE = ["FTS32053", "UXN47036"]; // Metodologi Penelitian, KKN
-const KERJA_PRAKTEK_KODE = "TIS32453";
+export const KERJA_PRAKTEK_KODE = "TIS32453";
+export const MBKM_PREREQ = ["FTS32053", "TIS41463"]; // Metopen, Sempro
 
 export const getMKMBKM = (tipe) => kurikulum.filter(mk => {
   if (AGAMA_KODE.includes(mk.kode)) return false;
   if (MBKM_EXCLUDE.includes(mk.kode)) return false;
-  if (mk.kode === KERJA_PRAKTEK_KODE) return tipe === "Kerja Praktik";
-  return true;
+  return true; // Kerja Praktek tampil di semua tipe
 });

@@ -157,6 +157,7 @@ export default function Dashboard({ user }) {
           mbkmData={mbkmData}
           onSave={saveMBKM}
           onClose={() => setShowMBKM(false)}
+          statusMK={statusMK}
         />
       )}
 

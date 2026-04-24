@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react";
 import { X, Check } from "lucide-react";
-import { getMKMBKM } from "../data/kurikulum";
+import { getMKMBKM, KERJA_PRAKTEK_KODE, MBKM_PREREQ } from "../data/kurikulum";
 import styles from "./MBKMModal.module.css";
 
-export default function MBKMModal({ mbkmData, onSave, onClose }) {
+export default function MBKMModal({ mbkmData, onSave, onClose, statusMK = {} }) {
   const periode = mbkmData.length === 0 ? 1 : mbkmData.length + 1;
   const [tipe, setTipe] = useState("Studi Independen");
   const [semester, setSemester] = useState(5);
   const [sks, setSks] = useState(20);
   const [selected, setSelected] = useState(
-    mbkmData.find(m => m.periode === periode)?.mataKuliah || []
+    tipe === "Studi Independen"
+      ? [...new Set([...(mbkmData.find(m => m.periode === periode)?.mataKuliah || []), KERJA_PRAKTEK_KODE])]
+      : (mbkmData.find(m => m.periode === periode)?.mataKuliah || [])
   );
   const [search, setSearch] = useState("");
+
+  // Cek prereq: Metopen + Sempro harus sudah diambil
+  const missingPrereq = MBKM_PREREQ.filter(kode => statusMK[kode] !== "diambil");
+  const prereqOk = missingPrereq.length === 0;
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -26,6 +32,8 @@ export default function MBKMModal({ mbkmData, onSave, onClose }) {
   const totalSelected = mkList.filter(mk => selected.includes(mk.kode)).reduce((s, mk) => s + mk.sks, 0);
 
   const toggle = (kode) => {
+    // Kerja Praktek wajib untuk Studi Independen, tidak bisa di-uncheck
+    if (tipe === "Studi Independen" && kode === KERJA_PRAKTEK_KODE) return;
     const mk = mkList.find(m => m.kode === kode);
     if (selected.includes(kode)) {
       setSelected(s => s.filter(k => k !== kode));
@@ -36,6 +44,7 @@ export default function MBKMModal({ mbkmData, onSave, onClose }) {
   };
 
   const handleSave = () => {
+    if (!prereqOk) return;
     if (mbkmData.length >= 2 && !mbkmData.find(m => m.periode === periode)) {
       alert("Maksimal 2 periode MBKM");
       return;
@@ -60,14 +69,25 @@ export default function MBKMModal({ mbkmData, onSave, onClose }) {
                 <button
                   key={t}
                   className={tipe === t ? styles.segActive : styles.segBtn}
-                  onClick={() => { setTipe(t); setSelected([]); setSearch(""); }}
+                  onClick={() => {
+                    const next = t;
+                    setTipe(next);
+                    setSearch("");
+                    setSelected(next === "Studi Independen" ? [KERJA_PRAKTEK_KODE] : []);
+                  }}
                 >{t}</button>
               ))}
             </div>
             {tipe === "Studi Independen" && (
               <div className={styles.infoBox}>
                 <span>ℹ️</span>
-                <span>MK Kerja Praktek tidak dapat dikonversi pada tipe ini.</span>
+                <span>MK Kerja Praktek wajib dipilih untuk Studi Independen.</span>
+              </div>
+            )}
+            {!prereqOk && (
+              <div className={styles.warnBox}>
+                <span>🔒</span>
+                <span>Harus sudah mengambil <strong>Metodologi Penelitian</strong> dan <strong>Seminar Proposal</strong> sebelum mengisi MBKM.</span>
               </div>
             )}
             <div className={styles.noteBox}>
@@ -139,7 +159,7 @@ export default function MBKMModal({ mbkmData, onSave, onClose }) {
 
         <div className={styles.footer}>
           <button className="btn-secondary" onClick={onClose}>Batal</button>
-          <button className="btn-primary" onClick={handleSave}>Simpan MBKM</button>
+          <button className="btn-primary" onClick={handleSave} disabled={!prereqOk} style={{ opacity: prereqOk ? 1 : 0.4, cursor: prereqOk ? "pointer" : "not-allowed" }}>Simpan MBKM</button>
         </div>
       </div>
     </div>
