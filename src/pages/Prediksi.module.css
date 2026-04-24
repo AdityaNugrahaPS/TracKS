@@ -30,6 +30,19 @@
   .title { font-size: 22px; }
 }
 
+.warnBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--warning-soft, #fff8e1);
+  border: 1px solid var(--warning, #f59e0b);
+  color: var(--warning, #b45309);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
 .summCard {
   background: var(--bg-secondary);
   border-radius: var(--radius);

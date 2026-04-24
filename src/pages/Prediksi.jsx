@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { PartyPopper } from "lucide-react";
+import { PartyPopper, AlertTriangle } from "lucide-react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
-import { kurikulum, AGAMA_KODE } from "../data/kurikulum";
+import { kurikulum, AGAMA_KODE, getWajibKodes } from "../data/kurikulum";
 import styles from "./Prediksi.module.css";
 
 const TOTAL_SKS = 144;
@@ -57,9 +57,22 @@ export default function Prediksi({ user }) {
     return { sem, totalSKS, diambilSKS, diambilCount, total: mks.length, wajibSKS, pilihanSKS, konversiSKS, mbkm: mbkmSem };
   });
 
-  const totalDiambil = semData.reduce((s, d) => s + d.diambilSKS, 0);
+  const totalDiambil = Math.min(semData.reduce((s, d) => s + d.diambilSKS, 0), TOTAL_SKS);
   const sisaSKS = Math.max(0, TOTAL_SKS - totalDiambil);
-  const semesterSisa = sisaSKS > 0 ? Math.ceil(sisaSKS / 20) : 0;
+
+  const wajibKodes = getWajibKodes();
+  const wajibBelumDiambil = wajibKodes.filter(kode => {
+    const st = getStatus(kode);
+    return st !== "diambil" && st !== "konversi";
+  });
+  const agamaSudah = agamaChoice !== null;
+  const semuaWajibSelesai = wajibBelumDiambil.length === 0 && agamaSudah;
+  const sudahLulus = sisaSKS === 0 && semuaWajibSelesai;
+
+  const semesterSisa = !sudahLulus ? Math.ceil((sisaSKS + wajibBelumDiambil.reduce((s, k) => {
+    const mk = kurikulum.find(m => m.kode === k);
+    return s + (mk?.sks || 0);
+  }, 0)) / 20) : 0;
   const lastSemDone = semData.filter(d => d.diambilSKS > 0).slice(-1)[0]?.sem || 0;
   const estimasiLulus = lastSemDone + semesterSisa;
 
@@ -79,11 +92,21 @@ export default function Prediksi({ user }) {
         </div>
         <div className={styles.summCard}>
           <p className={styles.summLabel}>Estimasi Semester Lulus</p>
-          <p className={styles.summVal} style={{ color: "var(--success)" }}>
-            {estimasiLulus > 0 ? `Semester ${estimasiLulus}` : <span style={{display:"flex",alignItems:"center",gap:6}}>Selesai <PartyPopper size={18}/></span>}
+          <p className={styles.summVal} style={{ color: sudahLulus ? "var(--success)" : "var(--text-primary)" }}>
+            {sudahLulus
+              ? <span style={{display:"flex",alignItems:"center",gap:6}}>Selesai <PartyPopper size={18}/></span>
+              : estimasiLulus > 0 ? `Semester ${estimasiLulus}` : "—"
+            }
           </p>
         </div>
       </div>
+
+      {sisaSKS === 0 && !semuaWajibSelesai && (
+        <div className={styles.warnBox}>
+          <AlertTriangle size={16} />
+          <span>SKS sudah 144, tapi ada mata kuliah wajib yang belum diambil. Kelulusan belum terpenuhi.</span>
+        </div>
+      )}
 
       <h2 className={styles.sectionTitle}>Timeline per Semester</h2>
       <div className={styles.timeline}>
