@@ -1,0 +1,215 @@
+.wrapper {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.2s;
+}
+.wrapper:hover { box-shadow: var(--shadow-sm); }
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+  gap: 12px;
+}
+.header:hover { background: var(--bg-tertiary); }
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.semBadge {
+  font-size: 11.5px;
+  font-weight: 700;
+  background: var(--accent);
+  color: #fff;
+  padding: 3px 11px;
+  border-radius: 20px;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+.semInfo {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.miniProgress {
+  flex: 1;
+  max-width: 100px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.miniProgressFill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--accent-light), var(--accent));
+  transition: width 0.5s ease;
+}
+
+.pct {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 32px;
+}
+
+.tableWrap { overflow-x: auto; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.table th {
+  text-align: left;
+  padding: 8px 16px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.table tr:last-child td { border-bottom: none; }
+.table tbody tr { transition: background 0.1s; }
+.table tbody tr:hover { background: var(--bg-tertiary); }
+
+.num {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  width: 36px;
+  text-align: center;
+}
+
+.kode {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  white-space: nowrap;
+  width: 110px;
+}
+
+.namaCell {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.namaMK {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: -0.1px;
+}
+.namaEn {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.sksCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.sksNum {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+  min-width: 18px;
+}
+.sksDetail {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+.belum {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.btnAmbil {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.btnAmbil:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,122,255,0.3);
+}
+.btnAmbil:active { transform: scale(0.97); }
+
+.btnBatal {
+  color: var(--text-tertiary);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btnBatal:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.agamaSelect {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.agamaSelect:hover { border-color: var(--accent); }
+.agamaSelect:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,122,255,0.15); }
+
+@media (max-width: 640px) {
+  .header { padding: 10px 14px; }
+  .table { font-size: 12.5px; }
+  .table th { padding: 6px 10px; font-size: 9.5px; }
+  .table td { padding: 8px 10px; }
+  .kode { display: none; }
+  .namaEn { display: none; }
+  .sksDetail { display: none; }
+  .num { width: 24px; }
+}

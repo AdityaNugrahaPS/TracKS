@@ -1,0 +1,220 @@
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 36px 24px 100px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+  margin-bottom: 4px;
+}
+
+.sub {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+@media (max-width: 540px) {
+  .summary { grid-template-columns: 1fr; }
+  .container { padding: 24px 14px 80px; }
+  .title { font-size: 22px; }
+}
+
+.summCard {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+}
+
+.summLabel {
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  margin-bottom: 8px;
+}
+
+.summVal {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 36px;
+}
+
+.timelineItem {
+  display: flex;
+}
+
+.dot { display: none; }
+.dotDone { display: none; }
+.dotMbkm { display: none; }
+
+.timelineCard {
+  flex: 1;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  border-left: 3px solid var(--border);
+  transition: border-color 0.2s;
+}
+
+.done .timelineCard {
+  border-left-color: var(--success);
+}
+
+.timelineCard:has(.pillKonversi) {
+  border-left-color: var(--purple);
+}
+
+.timelineHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.semLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.2px;
+}
+
+.mbkmTag {
+  background: var(--purple-soft);
+  color: var(--purple);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.doneTag {
+  background: var(--success-soft);
+  color: var(--success);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.timelineSub {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+
+.sksPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pillWajib {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: rgba(0,122,255,0.12);
+  color: var(--accent);
+}
+
+.pillPilihan {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: rgba(52,199,89,0.12);
+  color: var(--success);
+}
+
+.pillKonversi {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: var(--purple-soft);
+  color: var(--purple);
+}
+
+.pillEmpty {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.mbkmCards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mbkmCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+.mbkmHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.mbkmPeriode {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.mbkmTipe {
+  background: var(--purple-soft);
+  color: var(--purple);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mbkmInfo {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.mbkmMks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

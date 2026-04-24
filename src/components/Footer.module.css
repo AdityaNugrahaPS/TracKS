@@ -1,0 +1,36 @@
+.footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+  margin-top: 60px;
+  padding: 24px;
+}
+
+.inner {
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.link {
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.link:hover { opacity: 0.75; }
+
+.copy {
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 480px) {
+  .footer { padding: 20px 14px; }
+}

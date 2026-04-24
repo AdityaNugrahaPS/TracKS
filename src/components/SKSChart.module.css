@@ -1,0 +1,40 @@
+.wrapper {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px 8px;
+  margin-bottom: 24px;
+}
+
+.label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.tooltip {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  box-shadow: var(--shadow-sm);
+  font-size: 12.5px;
+}
+
+.tooltipLabel {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.tooltipDiambil {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tooltipTotal {
+  color: var(--text-tertiary);
+}
