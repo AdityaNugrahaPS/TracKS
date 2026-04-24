@@ -15,9 +15,7 @@ export default function MBKMModal({ mbkmData, onSave, onClose, statusMK = {} }) 
   );
   const [search, setSearch] = useState("");
 
-  // Cek prereq: Metopen + Sempro harus sudah diambil
-  const missingPrereq = MBKM_PREREQ.filter(kode => statusMK[kode] !== "diambil");
-  const prereqOk = missingPrereq.length === 0;
+  const prereqOk = true;
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -82,12 +80,6 @@ export default function MBKMModal({ mbkmData, onSave, onClose, statusMK = {} }) 
               <div className={styles.infoBox}>
                 <span>ℹ️</span>
                 <span>MK Kerja Praktek wajib dipilih untuk Studi Independen.</span>
-              </div>
-            )}
-            {!prereqOk && (
-              <div className={styles.warnBox}>
-                <span>🔒</span>
-                <span>Harus sudah mengambil <strong>Metodologi Penelitian</strong> dan <strong>Seminar Proposal</strong> sebelum mengisi MBKM.</span>
               </div>
             )}
             <div className={styles.noteBox}>
