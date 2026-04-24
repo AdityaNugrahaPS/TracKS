@@ -53,11 +53,25 @@ export default function Dashboard({ user }) {
     save(newStatus, mbkmData, newAgama);
   };
 
+  const PREREQ = {
+    "TIS41463": { butuh: "FTS32053", nama: "Metodologi Penelitian" },  // Sempro butuh Metopen
+    "TIS42473": { butuh: "TIS41463", nama: "Seminar Proposal" },        // Tugas Akhir butuh Sempro
+  };
+
   const toggleStatus = (kode) => {
     if (AGAMA_KODE.includes(kode)) return;
     const current = statusMK[kode];
     const isKonversi = mbkmData.some(m => m.mataKuliah?.includes(kode));
     if (isKonversi) return;
+
+    if (current !== "diambil" && PREREQ[kode]) {
+      const { butuh, nama } = PREREQ[kode];
+      const prereqStatus = statusMK[butuh] || mbkmData.some(m => m.mataKuliah?.includes(butuh)) ? "ok" : "belum";
+      if (prereqStatus !== "ok") {
+        alert(`Mata kuliah ini memerlukan "${nama}" diambil terlebih dahulu.`);
+        return;
+      }
+    }
 
     const newStatus = { ...statusMK, [kode]: current === "diambil" ? undefined : "diambil" };
     if (newStatus[kode] === undefined) delete newStatus[kode];
