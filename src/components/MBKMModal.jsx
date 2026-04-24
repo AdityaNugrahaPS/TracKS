@@ -8,11 +8,7 @@ export default function MBKMModal({ mbkmData, onSave, onClose, statusMK = {} }) 
   const [tipe, setTipe] = useState("Studi Independen");
   const [semester, setSemester] = useState(5);
   const [sks, setSks] = useState(20);
-  const [selected, setSelected] = useState(
-    tipe === "Studi Independen"
-      ? [...new Set([...(mbkmData.find(m => m.periode === periode)?.mataKuliah || []), KERJA_PRAKTEK_KODE])]
-      : (mbkmData.find(m => m.periode === periode)?.mataKuliah || [])
-  );
+  const [selected, setSelected] = useState(mbkmData.find(m => m.periode === periode)?.mataKuliah || []);
   const [search, setSearch] = useState("");
 
   const prereqOk = true;
@@ -30,8 +26,6 @@ export default function MBKMModal({ mbkmData, onSave, onClose, statusMK = {} }) 
   const totalSelected = mkList.filter(mk => selected.includes(mk.kode)).reduce((s, mk) => s + mk.sks, 0);
 
   const toggle = (kode) => {
-    // Kerja Praktek wajib untuk Studi Independen, tidak bisa di-uncheck
-    if (tipe === "Studi Independen" && kode === KERJA_PRAKTEK_KODE) return;
     const mk = mkList.find(m => m.kode === kode);
     if (selected.includes(kode)) {
       setSelected(s => s.filter(k => k !== kode));
@@ -71,17 +65,11 @@ export default function MBKMModal({ mbkmData, onSave, onClose, statusMK = {} }) 
                     const next = t;
                     setTipe(next);
                     setSearch("");
-                    setSelected(next === "Studi Independen" ? [KERJA_PRAKTEK_KODE] : []);
+                    setSelected([]);
                   }}
                 >{t}</button>
               ))}
             </div>
-            {tipe === "Studi Independen" && (
-              <div className={styles.infoBox}>
-                <span>ℹ️</span>
-                <span>MK Kerja Praktek wajib dipilih untuk Studi Independen.</span>
-              </div>
-            )}
             <div className={styles.noteBox}>
               <span>📋</span>
               <span>Sebaiknya konsultasikan konversi mata kuliah dengan Ketua Program Studi.</span>

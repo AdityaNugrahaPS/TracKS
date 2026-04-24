@@ -84,8 +84,14 @@ const MBKM_EXCLUDE = ["FTS32053", "UXN47036"]; // Metodologi Penelitian, KKN
 export const KERJA_PRAKTEK_KODE = "TIS32453";
 export const MBKM_PREREQ = ["FTS32053", "TIS41463"]; // Metopen, Sempro
 
+// Kode semua MK Wajib non-agama (agama cukup 1)
+export const getWajibKodes = () => kurikulum
+  .filter(mk => mk.sifat === "Wajib" && !AGAMA_KODE.includes(mk.kode))
+  .map(mk => mk.kode);
+
 export const getMKMBKM = (tipe) => kurikulum.filter(mk => {
   if (AGAMA_KODE.includes(mk.kode)) return false;
   if (MBKM_EXCLUDE.includes(mk.kode)) return false;
-  return true; // Kerja Praktek tampil di semua tipe
+  if (tipe === "Studi Independen" && mk.kode === KERJA_PRAKTEK_KODE) return false;
+  return true;
 });
