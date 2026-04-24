@@ -99,18 +99,6 @@ export default function Dashboard({ user }) {
           return;
         }
 
-        // Pilihan hanya bisa diambil setelah semua Wajib selesai
-        if (mk.sifat === "Pilihan") {
-          const wajibBelum = getWajibKodes().some(k => {
-            const s = statusMK[k] ? "diambil" : mbkmData.some(m => m.mataKuliah?.includes(k)) ? "konversi" : "belum";
-            return s === "belum";
-          });
-          const agamaBelum = !agamaChoice;
-          if (wajibBelum || agamaBelum) {
-            showToast("Selesaikan semua mata kuliah Wajib terlebih dahulu sebelum mengambil mata kuliah Pilihan.");
-            return;
-          }
-        }
       }
     }
 
@@ -122,6 +110,17 @@ export default function Dashboard({ user }) {
 
   const ambilSemuaSemester = (sem) => {
     const mks = getMKBySemester(sem).filter(mk => !AGAMA_KODE.includes(mk.kode));
+    const newStatus = { ...statusMK };
+    mks.forEach(mk => {
+      const isKonversi = mbkmData.some(m => m.mataKuliah?.includes(mk.kode));
+      if (!isKonversi) newStatus[mk.kode] = "diambil";
+    });
+    setStatusMK(newStatus);
+    save(newStatus, mbkmData, agamaChoice);
+  };
+
+  const ambilWajibSemester = (sem) => {
+    const mks = getMKBySemester(sem).filter(mk => !AGAMA_KODE.includes(mk.kode) && mk.sifat === "Wajib");
     const newStatus = { ...statusMK };
     mks.forEach(mk => {
       const isKonversi = mbkmData.some(m => m.mataKuliah?.includes(mk.kode));
@@ -214,7 +213,8 @@ export default function Dashboard({ user }) {
             onAgamaChange={sem === 1 ? changeAgama : null}
             getStatus={getStatus}
             onToggle={toggleStatus}
-            onAmbilSemua={sem <= 4 ? () => ambilSemuaSemester(sem) : undefined}
+            onAmbilSemua={sem <= 4 ? () => ambilSemuaSemester(sem) : () => ambilWajibSemester(sem)}
+            labelAmbil={sem <= 4 ? "Ambil Semua" : "Ambil Wajib"}
           />
         ))}
       </div>

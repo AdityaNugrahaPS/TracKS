@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp, Plus, X } from "lucide-react";
 import styles from "./SemesterTable.module.css";
 
-export default function SemesterTable({ semester, mataKuliah, getStatus, onToggle, onAmbilSemua, agamaOptions, agamaChoice, onAgamaChange }) {
+export default function SemesterTable({ semester, mataKuliah, getStatus, onToggle, onAmbilSemua, labelAmbil = "Ambil Semua", agamaOptions, agamaChoice, onAgamaChange }) {
   const [open, setOpen] = useState(true);
 
   const agamaMK = agamaOptions?.find(m => m.kode === agamaChoice) || null;
@@ -23,7 +23,7 @@ export default function SemesterTable({ semester, mataKuliah, getStatus, onToggl
             <span
               className={styles.ambilSemua}
               onClick={e => { e.stopPropagation(); onAmbilSemua(); }}
-            >Ambil Semua</span>
+            >{labelAmbil}</span>
           )}
           {open
             ? <ChevronUp size={15} color="var(--text-tertiary)" />
