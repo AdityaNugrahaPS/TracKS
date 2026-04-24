@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { GraduationCap, RotateCcw, AlertTriangle, ShieldAlert } from "lucide-react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
-import { kurikulum, getSemesters, getMKBySemester, AGAMA_KODE } from "../data/kurikulum";
+import { kurikulum, getSemesters, getMKBySemester, AGAMA_KODE, getWajibKodes } from "../data/kurikulum";
 import SummaryCards from "../components/SummaryCards";
 import SemesterTable from "../components/SemesterTable";
 import MBKMModal from "../components/MBKMModal";
@@ -66,18 +66,51 @@ export default function Dashboard({ user }) {
     "TIS42473": { butuh: "TIS41463", nama: "Seminar Proposal" },        // Tugas Akhir butuh Sempro
   };
 
+  const calcTotalSKS = (status, mbkm, agama) => kurikulum.reduce((sum, m) => {
+    if (AGAMA_KODE.includes(m.kode)) return m.kode === agama ? sum + m.sks : sum;
+    const s = status[m.kode] ? "diambil" : mbkm.some(x => x.mataKuliah?.includes(m.kode)) ? "konversi" : "belum";
+    return s === "diambil" || s === "konversi" ? sum + m.sks : sum;
+  }, 0);
+
   const toggleStatus = (kode) => {
     if (AGAMA_KODE.includes(kode)) return;
     const current = statusMK[kode];
     const isKonversi = mbkmData.some(m => m.mataKuliah?.includes(kode));
     if (isKonversi) return;
 
-    if (current !== "diambil" && PREREQ[kode]) {
-      const { butuh, nama } = PREREQ[kode];
-      const prereqStatus = statusMK[butuh] || mbkmData.some(m => m.mataKuliah?.includes(butuh)) ? "ok" : "belum";
-      if (prereqStatus !== "ok") {
-        showToast(`Mata kuliah ini memerlukan "${nama}" diambil terlebih dahulu.`);
-        return;
+    if (current !== "diambil") {
+      // Prereq check
+      if (PREREQ[kode]) {
+        const { butuh, nama } = PREREQ[kode];
+        const prereqOk = statusMK[butuh] || mbkmData.some(m => m.mataKuliah?.includes(butuh));
+        if (!prereqOk) {
+          showToast(`Mata kuliah ini memerlukan "${nama}" diambil terlebih dahulu.`);
+          return;
+        }
+      }
+
+      const mk = kurikulum.find(m => m.kode === kode);
+      if (mk) {
+        const currentTotal = calcTotalSKS(statusMK, mbkmData, agamaChoice);
+
+        // Max 144 SKS
+        if (currentTotal + mk.sks > TOTAL_SKS_LULUS) {
+          showToast(`Batas maksimal 144 SKS sudah tercapai. Tidak bisa menambah mata kuliah lagi.`);
+          return;
+        }
+
+        // Pilihan hanya bisa diambil setelah semua Wajib selesai
+        if (mk.sifat === "Pilihan") {
+          const wajibBelum = getWajibKodes().some(k => {
+            const s = statusMK[k] ? "diambil" : mbkmData.some(m => m.mataKuliah?.includes(k)) ? "konversi" : "belum";
+            return s === "belum";
+          });
+          const agamaBelum = !agamaChoice;
+          if (wajibBelum || agamaBelum) {
+            showToast("Selesaikan semua mata kuliah Wajib terlebih dahulu sebelum mengambil mata kuliah Pilihan.");
+            return;
+          }
+        }
       }
     }
 
