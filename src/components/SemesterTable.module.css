@@ -206,10 +206,13 @@
 @media (max-width: 640px) {
   .header { padding: 10px 14px; }
   .table { font-size: 12.5px; }
-  .table th { padding: 6px 10px; font-size: 9.5px; }
-  .table td { padding: 8px 10px; }
+  .table th { padding: 6px 8px; font-size: 9.5px; }
+  .table td { padding: 8px 8px; }
   .kode { display: none; }
   .namaEn { display: none; }
   .sksDetail { display: none; }
-  .num { width: 24px; }
+  .num { display: none; }
+  .belum { display: none; }
+  .table th:nth-child(5),
+  .table td:nth-child(5) { display: none; }
 }
