@@ -79,6 +79,17 @@ export default function Dashboard({ user }) {
     save(newStatus, mbkmData, agamaChoice);
   };
 
+  const ambilSemuaSemester = (sem) => {
+    const mks = getMKBySemester(sem).filter(mk => !AGAMA_KODE.includes(mk.kode));
+    const newStatus = { ...statusMK };
+    mks.forEach(mk => {
+      const isKonversi = mbkmData.some(m => m.mataKuliah?.includes(mk.kode));
+      if (!isKonversi) newStatus[mk.kode] = "diambil";
+    });
+    setStatusMK(newStatus);
+    save(newStatus, mbkmData, agamaChoice);
+  };
+
   const resetAll = async () => {
     await setDoc(doc(db, "users", user.uid), { statusMK: {}, mbkmData: [], agamaChoice: null }, { merge: false });
     setStatusMK({});
@@ -162,6 +173,7 @@ export default function Dashboard({ user }) {
             onAgamaChange={sem === 1 ? changeAgama : null}
             getStatus={getStatus}
             onToggle={toggleStatus}
+            onAmbilSemua={sem <= 4 ? () => ambilSemuaSemester(sem) : undefined}
           />
         ))}
       </div>
