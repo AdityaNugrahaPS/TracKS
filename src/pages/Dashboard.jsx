@@ -151,6 +151,17 @@ export default function Dashboard({ user }) {
     save(statusMK, newMbkm, agamaChoice);
   };
 
+  const batalKonversi = (kode) => {
+    const newMbkm = mbkmData.map(m => {
+      if (!m.mataKuliah?.includes(kode)) return m;
+      const mataKuliah = m.mataKuliah.filter(k => k !== kode);
+      const sks = kurikulum.filter(mk => mataKuliah.includes(mk.kode)).reduce((s, mk) => s + mk.sks, 0);
+      return { ...m, mataKuliah, sks };
+    }).filter(m => m.mataKuliah.length > 0);
+    setMbkmData(newMbkm);
+    save(statusMK, newMbkm, agamaChoice);
+  };
+
   const getStatus = (mk) => {
     for (const m of mbkmData) {
       if (m.mataKuliah?.includes(mk.kode)) return "konversi";
@@ -219,6 +230,7 @@ export default function Dashboard({ user }) {
             onAgamaChange={sem === 1 ? changeAgama : null}
             getStatus={getStatus}
             onToggle={toggleStatus}
+            onBatalKonversi={batalKonversi}
             onAmbilSemua={sem <= 4 ? () => ambilSemuaSemester(sem) : () => ambilWajibSemester(sem)}
             labelAmbil={sem <= 4 ? "Ambil Semua" : "Ambil Wajib"}
           />

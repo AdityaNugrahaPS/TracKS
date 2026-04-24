@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp, Plus, X } from "lucide-react";
 import styles from "./SemesterTable.module.css";
 
-export default function SemesterTable({ semester, mataKuliah, getStatus, onToggle, onAmbilSemua, labelAmbil = "Ambil Semua", agamaOptions, agamaChoice, onAgamaChange }) {
+export default function SemesterTable({ semester, mataKuliah, getStatus, onToggle, onBatalKonversi, onAmbilSemua, labelAmbil = "Ambil Semua", agamaOptions, agamaChoice, onAgamaChange }) {
   const [open, setOpen] = useState(true);
 
   const agamaMK = agamaOptions?.find(m => m.kode === agamaChoice) || null;
@@ -117,6 +117,11 @@ export default function SemesterTable({ semester, mataKuliah, getStatus, onToggl
                       )}
                       {status === "diambil" && (
                         <button className={styles.btnBatal} onClick={() => onToggle(mk.kode)}>
+                          Batal
+                        </button>
+                      )}
+                      {status === "konversi" && onBatalKonversi && (
+                        <button className={styles.btnBatal} onClick={() => onBatalKonversi(mk.kode)}>
                           Batal
                         </button>
                       )}
