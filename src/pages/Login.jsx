@@ -14,7 +14,7 @@ export default function Login() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <div className={styles.logo}>T</div>
+        <img src="/logoBrowser.png" className={styles.logo} alt="TracKS" />
         <h1 className={styles.title}>TracKS</h1>
         <p className={styles.subtitle}>Rencanakan studimu dengan lebih cerdas</p>
         <button className={styles.googleBtn} onClick={handleLogin}>
